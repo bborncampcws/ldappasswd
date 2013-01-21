@@ -11,8 +11,9 @@ class UsersController < ApplicationController
       attrs=["uid"]
       filter = Net::LDAP::Filter.eq( "uid", "*" )
       ldap.search(:base=>treebase, :attributes=>attrs,:filter=>filter) do |entry|
-         @users.push entry.uid
+         @users.push entry.uid[0]
       end
+    @users.sort!
     else
         @errors=ldap.get_operation_result
     end
