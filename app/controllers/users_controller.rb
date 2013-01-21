@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   # GET /users
   def index
     @users=[]
+    password=File.open('config/password','r').first.split "\n"
     auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>"XXXXX"}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if ldap.bind
