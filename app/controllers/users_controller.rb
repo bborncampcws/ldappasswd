@@ -2,8 +2,9 @@ class UsersController < ApplicationController
   # GET /users
   def index
     @users=[]
-    password=File.open('config/password','r').first.split "\n"
-    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>"XXXXX"}
+    password=File.open('config/password','r').first.split("\n")[0]
+    @errors=''
+    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if ldap.bind
       treebase="ou=People,dc=cws,dc=net"
@@ -13,7 +14,7 @@ class UsersController < ApplicationController
          @users.push entry.uid
       end
     else
-        @users=ldap.get_operation_result
+        @errors=ldap.get_operation_result
     end
 
   end
@@ -37,8 +38,8 @@ class UsersController < ApplicationController
     user=params[:id]
     @user=User.new()
     @user.name=user
-
-    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>"XXXXX"}
+    password=File.open('config/password','r').first.split("\n")[0]
+    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if ldap.bind
       dn = "uid=#{@user.name}, ou=people, dc=cws, dc=net"
