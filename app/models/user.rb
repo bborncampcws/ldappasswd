@@ -4,7 +4,27 @@ class User
   extend ActiveModel::Naming
  
   attr_accessor :username, :password, :homedir
- 
+  
+  #destroy user from ldap
+  def destroy
+    ldapPassword=File.open('config/password','r').first.split("\n")[0]
+    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>ldapPassword}
+    ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
+    if (not username.empty?) and ldap.bind
+      dn="uid=#{username},dc=cws,dc=net"
+      if ldap.delete :dn=>dn
+        true
+      end
+    end
+      
+    ldaperror=ldap.get_operation_result
+    puts ldaperror
+    errors.add "ldap could not add user #{ldaperror}",'ldap_errors'
+    errors.add 
+    false
+  end
+
+
 
   #create a new user in the ldap directory
   def create
