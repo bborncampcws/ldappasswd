@@ -1,0 +1,30 @@
+<h1>Create User</h1>
+
+<table>
+
+</table>
+      <ul>
+      <% @user.errors.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul> 
+<%=@user.username%>
+
+<%= form_for(@user) do |f| %>
+  <div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username %>
+  </div>
+  <div class="field">
+    <%= f.label :homedir %><br />
+    <%= f.text_field :homedir %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.text_field :password %>
+  </div>
+  <div class="actions">
+    <%= f.submit  %>
+   </div>
+<% end %>
+

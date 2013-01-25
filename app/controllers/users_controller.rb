@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   def index
     @users=[]
     password=File.open('config/password','r').first.split("\n")[0]
-    @errors=''
+    @errorr=''
     auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if ldap.bind
@@ -24,32 +24,32 @@ class UsersController < ApplicationController
   def edit
     user=params[:id]
     @user=User.new()
-    @user.name=user
+    @user.username=user
   end
 
 
   def show
     user=params[:id]
     @user=User.new()
-    @user.name=user
+    @user.username=user
   end
 
 
   def update
     user=params[:id]
     @user=User.new()
-    @user.name=user
+    @user.username=user
     password=File.open('config/password','r').first.split("\n")[0]
     auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if ldap.bind
-      dn = "uid=#{@user.name}, ou=people, dc=cws, dc=net"
+      dn = "uid=#{@user.username}, ou=people, dc=cws, dc=net"
       hash=Net::LDAP::Password.generate :md5, request.POST['user']['password']
      
     ldap.replace_attribute dn, :userPassword, hash
      
       respond_to do |format|
-        format.html {redirect_to :action => 'edit' , notice: "User #{@user.name} was updated."} 
+        format.html {redirect_to :action => 'edit' , notice: "User #{@user.username} was updated."} 
       end
     else
       respond_to do |format|
@@ -57,5 +57,25 @@ class UsersController < ApplicationController
       end
     end
   end
+
+  def create
+    @user = User.new(params[:user])
+    respond_to do |format|
+      if @user.create
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+      else
+        format.html { render action: "new" }
+      end
+    end
+  end
+
+  def new
+    @user = User.new
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @user }
+    end
+  end
+
 
 end
