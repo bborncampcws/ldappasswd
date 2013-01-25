@@ -20,7 +20,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user=User.new()
+    @user.username=params[:id]
     @user.destroy
 
     respond_to do |format|

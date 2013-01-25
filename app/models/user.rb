@@ -20,7 +20,6 @@ class User
     ldaperror=ldap.get_operation_result
     puts ldaperror
     errors.add "ldap could not add user #{ldaperror}",'ldap_errors'
-    errors.add 
     false
   end
 
