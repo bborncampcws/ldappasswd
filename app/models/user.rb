@@ -11,9 +11,9 @@ class User
     auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>ldapPassword}
     ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
     if (not username.empty?) and ldap.bind
-      dn="uid=#{username},dc=cws,dc=net"
+      dn="uid=#{username},ou=People,dc=cws,dc=net"
       if ldap.delete :dn=>dn
-        true
+        return true
       end
     end
       
