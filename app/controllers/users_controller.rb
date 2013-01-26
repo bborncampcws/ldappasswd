@@ -47,15 +47,7 @@ class UsersController < ApplicationController
     user=params[:id]
     @user=User.new()
     @user.username=user
-    password=File.open('config/password','r').first.split("\n")[0]
-    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
-    ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
-    if ldap.bind
-      dn = "uid=#{@user.username}, ou=people, dc=cws, dc=net"
-      hash=Net::LDAP::Password.generate :md5, request.POST['user']['password']
-     
-    ldap.replace_attribute dn, :userPassword, hash
-     
+    if @user.update request.POST['user']['password']
       respond_to do |format|
         format.html {redirect_to :action => 'edit' , notice: "User #{@user.username} was updated."} 
       end

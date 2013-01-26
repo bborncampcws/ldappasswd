@@ -1,0 +1,29 @@
+erh1>Reset Password</h1>
+
+<table>
+  <tr>
+    <th>Username</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+
+  <tr>
+    <td><%= @group.groupname %></td>
+  </tr>
+
+
+</table>
+
+
+<%= form_for(@group, :html => { :method => "put" },:url => { :action=>:update}) do |f| %>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.text_field :password %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Update Password" %>
+   </div>
+<% end %>
+

@@ -1,0 +1,22 @@
+<h1>Listing Users</h1>
+<%= @errors %>
+<table>
+  <tr>
+    <th>Username</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+
+<% @groups.each do |group| %>
+  <tr>
+    <td><%= group %></td>
+    <td><%= link_to 'Reset', edit_group_path(group)%></td>
+    <td><%= link_to 'Destroy', group_path(group), :confirm => 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

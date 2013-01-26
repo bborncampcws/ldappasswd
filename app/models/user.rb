@@ -4,6 +4,22 @@ class User
   extend ActiveModel::Naming
  
   attr_accessor :username, :password, :homedir
+
+  #all this does is reset passwords
+  def update(newPassword)
+    password=File.open('config/password','r').first.split("\n")[0]
+    auth = {:method=>:simple, :username=>"cn=admin,dc=cws,dc=net", :password=>password}
+    ldap=Net::LDAP.new(:host=>'ldap.cws.net',  :port=>636, :auth=>auth, :encryption=>:simple_tls)
+    if ldap.bind
+      dn = "uid=#{username}, ou=people, dc=cws, dc=net"
+      hash=Net::LDAP::Password.generate :md5, newPassword 
+      if ldap.replace_attribute dn, :userPassword, hash
+        return true
+      end
+    end
+    false
+  end
+
   
   #destroy user from ldap
   def destroy

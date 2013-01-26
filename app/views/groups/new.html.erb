@@ -1,0 +1,22 @@
+<h1>Create User</h1>
+
+<table>
+
+</table>
+      <ul>
+      <% @group.errors.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul> 
+<%=@group.groupname%>
+
+<%= form_for(@group) do |f| %>
+  <div class="field">
+    <%= f.label :groupname %><br />
+    <%= f.text_field :groupname %>
+  </div>
+  <div class="actions">
+    <%= f.submit  %>
+   </div>
+<% end %>
+
