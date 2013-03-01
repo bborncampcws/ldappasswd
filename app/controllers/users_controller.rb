@@ -47,7 +47,7 @@ class UsersController < ApplicationController
     user=params[:id]
     @user=User.new()
     @user.username=user
-    if @user.update request.POST['user']['password']
+    if @user.update_password request.POST['user']['password']
       respond_to do |format|
         format.html {redirect_to :action => 'edit' , notice: "User #{@user.username} was updated."} 
       end
