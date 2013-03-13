@@ -1,0 +1,21 @@
+authorizations: &AUTHORIZATIONS
+  ## Authorization
+  group_base: ou=groups,dc=cws,dc=net
+  required_groups:
+    - cn=admins,ou=groups,dc=cws,dc=net
+  require_attribute:
+    objectClass: inetOrgPerson
+    authorizationRole: blogAdmin
+    
+test: &TEST
+  host: ldap.cws.net
+  port: 636
+  attribute: uid
+  base: ou=people,dc=cws,dc=net
+  admin_user: cn=admin,dc=cws,dc=net
+  admin_password: SECRET
+  ssl: true
+  <<: *AUTHORIZATIONS
+
+development:
+  <<: *TEST
